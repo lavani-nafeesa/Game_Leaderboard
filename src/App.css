@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0f172a;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  text-align: center;
+  padding: 30px;
+  color: white;
+}
+
+.leaderboard {
+  max-width: 420px;
+  margin: auto;
+  background-color: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.add-player {
+  margin-bottom: 20px;
+}
+
+.add-player input {
+  padding: 8px;
+  margin: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+.add-player button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #38bdf8;
+}
+
+.player {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #334155;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+}
+
+.score {
+  font-weight: bold;
+}
+
+.buttons button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
