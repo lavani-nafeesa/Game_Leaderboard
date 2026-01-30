@@ -1,69 +1,70 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Leaderboard() {
-  const [players, setPlayers] = useState([
-    { name: "Alex", score: 120 },
-    { name: "Sara", score: 150 },
-    { name: "John", score: 90 }
-  ]);
+  const navigate = useNavigate();
+
+  const [players, setPlayers] = useState(() => {
+    return JSON.parse(localStorage.getItem("players")) || [];
+  });
 
   const [name, setName] = useState("");
   const [score, setScore] = useState("");
 
+  useEffect(() => {
+    localStorage.setItem("players", JSON.stringify(players));
+  }, [players]);
+
   const addPlayer = () => {
-    if (name === "" || score === "") return;
+    if (!name || !score) return;
 
-    const updatedPlayers = [
-      ...players,
-      { name, score: Number(score) }
-    ].sort((a, b) => b.score - a.score);
+    const updated = [...players, { name, score: Number(score) }]
+      .sort((a, b) => b.score - a.score);
 
-    setPlayers(updatedPlayers);
+    setPlayers(updated);
     setName("");
     setScore("");
   };
 
-  const changeScore = (index, value) => {
-    const updated = [...players];
-    updated[index].score += value;
-    updated.sort((a, b) => b.score - a.score);
-    setPlayers(updated);
+  const deletePlayer = (i) => {
+    setPlayers(players.filter((_, index) => index !== i));
+  };
+
+  const logout = () => {
+    localStorage.removeItem("loggedInUser");
+    navigate("/");
   };
 
   return (
-    <div className="leaderboard">
-      <div className="add-player">
-        <input
-          type="text"
-          placeholder="Player name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+    <div className="page">
+      <button className="logout-btn" onClick={logout}>Logout</button>
 
-        <input
-          type="number"
-          placeholder="Score"
-          value={score}
-          onChange={(e) => setScore(e.target.value)}
-        />
+      <h1>🎮 Game Leaderboard</h1>
 
-        <button onClick={addPlayer}>Add Player</button>
-      </div>
-
-      {players.map((player, index) => (
-        <div className="player" key={index}>
-          <span>
-            {index + 1}. {player.name}
-          </span>
-
-          <span className="score">{player.score}</span>
-
-          <div className="buttons">
-            <button onClick={() => changeScore(index, 10)}>+</button>
-            <button onClick={() => changeScore(index, -10)}>-</button>
-          </div>
+      <div className="leaderboard">
+        <div className="add-player">
+          <input
+            placeholder="Player name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Score"
+            value={score}
+            onChange={(e) => setScore(e.target.value)}
+          />
+          <button onClick={addPlayer}>Add</button>
         </div>
-      ))}
+
+        {players.map((p, i) => (
+          <div className="player-card" key={i}>
+            <span>{i + 1}. {p.name}</span>
+            <span>{p.score}</span>
+            <button onClick={() => deletePlayer(i)}>❌</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
